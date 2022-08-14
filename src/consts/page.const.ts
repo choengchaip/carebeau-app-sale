@@ -1,5 +1,6 @@
 import {Middleware} from "../features/middlewares";
 import {Login} from "../features/auth/login";
+import {Job} from "../features/jobs";
 
 export const AppPage = {
   Middleware: {
@@ -9,5 +10,9 @@ export const AppPage = {
   Login: {
     key: 'Login',
     component: Login,
+  },
+  Job: {
+    key: 'Job',
+    component: Job,
   },
 }

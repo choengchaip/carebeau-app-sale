@@ -2,6 +2,7 @@ import {useState} from "react";
 import {ILoaderOptions, IStatus} from "./types.hook";
 import {NewRequester} from "../cores/request.core";
 import {useAsyncStorage} from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 
 export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
   const [_data, _setData] = useState<A | null>(null)
@@ -107,7 +108,66 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
           ...old,
           isSuccess: true,
         }))
-      }else{
+      } else {
+        throw 'not found'
+      }
+    } catch (e) {
+      _setStatus((old) => ({
+        ...old,
+        isError: true,
+        errorMessage: e.toString(),
+      }))
+    }
+
+    _setStatus((old) => ({
+      ...old,
+      isLoading: false,
+    }))
+  }
+
+  const cacheSecure = async () => {
+    _setStatus((old) => ({
+      ...old,
+      isSuccess: false,
+      isLoading: false,
+    }))
+
+    try {
+      await SecureStore.setItemAsync(options.key!, JSON.stringify(_data))
+      _setStatus((old) => ({
+        ...old,
+        isSuccess: true,
+      }))
+    } catch (e) {
+      _setStatus((old) => ({
+        ...old,
+        isError: true,
+        errorMessage: e.toString(),
+      }))
+    }
+
+    _setStatus((old) => ({
+      ...old,
+      isLoading: false,
+    }))
+  }
+
+  const getFromCacheSecure = async () => {
+    _setStatus((old) => ({
+      ...old,
+      isSuccess: true,
+      isLoading: false,
+    }))
+
+    try {
+      const str = await SecureStore.getItemAsync(options.key!)
+      if (str) {
+        _setData(JSON.parse(str))
+        _setStatus((old) => ({
+          ...old,
+          isSuccess: true,
+        }))
+      } else {
         throw 'not found'
       }
     } catch (e) {
@@ -129,6 +189,11 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
     run,
     cache,
     getFromCache,
+    cacheSecure,
+    getFromCacheSecure,
     status: () => _status,
+    setData: (data: any) => {
+      _setData(data)
+    },
   }
 }

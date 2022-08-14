@@ -1,24 +1,11 @@
 import {IProps} from "../../../cores/types.core";
 import {Box, Button, FormControl, Image, Input, ScrollView, Text, VStack, WarningOutlineIcon} from "native-base";
-import {useEffect, useState} from "react";
-import {useLogin} from "../../../loaders/auths/login.loader";
+import {useState} from "react";
 import {ComponentUtil} from "../../../utils/component.util";
-import {useCSRF} from "../../../loaders/auths/csrf.loader";
-import {useMount} from "../../../hooks/core.hook";
 
-export const LoginNew = (props: IProps) => {
+export const LoginNew = (props: { onLogin: (form: any) => void } & IProps) => {
   const [form, setForm] = useState<any>({})
   const [error, setError] = useState<any>({})
-  const csrf = useCSRF()
-  const login = useLogin()
-
-  useMount(async () => {
-    await csrf.run({})
-  })
-
-  useEffect(() => {
-    console.log(login.status())
-  }, [login.status()])
 
   const validate = (): boolean => {
     setError({})
@@ -43,10 +30,10 @@ export const LoginNew = (props: IProps) => {
 
   const onLogin = async () => {
     if (validate()) {
-      await login.run({
-        "email": "phisoot@carebeau-enjoy.com",
-        "password": "s@le",
-        "device_name": "Postman"
+      props.onLogin({
+        "email": form.email,
+        "password": form.password,
+        "device_name": "mobile"
       })
     }
   }
@@ -73,7 +60,6 @@ export const LoginNew = (props: IProps) => {
                   fontFamily={'medium'}
                   fontSize={16}
                   placeholderTextColor={'muted.400'}
-                  defaultValue={'phisoot@carebeau-enjoy.com'}
                   onChangeText={(value) => setForm({...form, email: value})}/>
                 {ComponentUtil.renderCondition(() => error.email, (
                   <FormControl.ErrorMessage>
@@ -101,7 +87,7 @@ export const LoginNew = (props: IProps) => {
               </VStack>
             </FormControl>
             <Button onPress={onLogin} height={12} width={'100%'} colorScheme="danger">
-              <Text fontFamily={'bold'} fontSize={16}>
+              <Text fontFamily={'bold'} fontSize={16} color={'white'}>
                 ลงชื่อเข้าใช้
               </Text>
             </Button>
