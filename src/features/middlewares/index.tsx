@@ -8,21 +8,24 @@ import {AppPage} from "../../consts/page.const";
 export const Middleware = (props: IProps) => {
   const me = useMe()
 
-  useMount(async () => {
+  useMount(() => {
     me.setData({
-      device_token: '203|uVyvK2U0NnOfOjcLc1PAH1OfSn7Sob4Vvqb68LF1'
+      device_token: '213|jOWz93sI3b2CMPtuWWIL6aVljopdGNEIENJuMcZS',
     })
-    console.log(me.data())
-    props.navigation.push(AppPage.Job.key)
-
-    // await me.getFromCacheSecure()
   })
 
   useEffect(() => {
-    if (me.status().isSuccess) {
-      props.navigation.push(AppPage.Login.key)
+    if (me.data) {
+      me.cache();
     }
-  }, [me.status().isSuccess])
+  }, [me.data])
+
+  useEffect(() => {
+    if (me.status.isSuccess && !me.status.isLoading) {
+      props.navigation.push(AppPage.Job.key)
+      // props.navigation.push(AppPage.Login.key)
+    }
+  }, [me.status.isSuccess, me.status.isLoading])
 
   return (
     <Box height={'100%'} width={'100%'} justifyContent={'center'} alignSelf={'center'} bg={'white'}>

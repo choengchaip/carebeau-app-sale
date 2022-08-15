@@ -5,8 +5,8 @@ import {useAsyncStorage} from "@react-native-async-storage/async-storage";
 import * as SecureStore from 'expo-secure-store';
 
 export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
-  const [_data, _setData] = useState<A | null>(null)
-  const [_status, _setStatus] = useState<IStatus>({
+  const [data, setData] = useState<A | null>(null)
+  const [status, setStatus] = useState<IStatus>({
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -15,7 +15,7 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
   })
 
   const run = async (payload: B) => {
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isSuccess: false,
       isLoading: true,
@@ -41,8 +41,8 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         throw (await response.data)
       }
 
-      _setData(response.data)
-      _setStatus((old) => ({
+      setData(response.data)
+      setStatus((old) => ({
         ...old,
         isSuccess: true,
       }))
@@ -51,21 +51,21 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         await options.onSuccess(response.data, response.headers)
       }
     } catch (e) {
-      _setStatus((old) => ({
+      setStatus((old) => ({
         ...old,
         isError: true,
         errorMessage: e,
       }))
     }
 
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isLoading: false,
     }))
   }
 
   const cache = async () => {
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isSuccess: false,
       isLoading: false,
@@ -73,38 +73,39 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
     const storage = useAsyncStorage(options.key!)
 
     try {
-      await storage.setItem(JSON.stringify(_data))
-      _setStatus((old) => ({
+      await storage.setItem(JSON.stringify(data))
+      setStatus((old) => ({
         ...old,
         isSuccess: true,
       }))
     } catch (e) {
-      _setStatus((old) => ({
+      console.log('cache error', e)
+      setStatus((old) => ({
         ...old,
         isError: true,
         errorMessage: e.toString(),
       }))
     }
 
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isLoading: false,
     }))
   }
 
   const getFromCache = async () => {
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
-      isSuccess: true,
-      isLoading: false,
+      isSuccess: false,
+      isLoading: true,
     }))
     const storage = useAsyncStorage(options.key!)
 
     try {
       const str = await storage.getItem()
       if (str) {
-        _setData(JSON.parse(str))
-        _setStatus((old) => ({
+        setData(JSON.parse(str))
+        setStatus((old) => ({
           ...old,
           isSuccess: true,
         }))
@@ -112,48 +113,49 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         throw 'not found'
       }
     } catch (e) {
-      _setStatus((old) => ({
+      console.log('get cache error', e)
+      setStatus((old) => ({
         ...old,
         isError: true,
         errorMessage: e.toString(),
       }))
     }
 
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isLoading: false,
     }))
   }
 
   const cacheSecure = async () => {
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isSuccess: false,
       isLoading: false,
     }))
 
     try {
-      await SecureStore.setItemAsync(options.key!, JSON.stringify(_data))
-      _setStatus((old) => ({
+      await SecureStore.setItemAsync(options.key!, JSON.stringify(data))
+      setStatus((old) => ({
         ...old,
         isSuccess: true,
       }))
     } catch (e) {
-      _setStatus((old) => ({
+      setStatus((old) => ({
         ...old,
         isError: true,
         errorMessage: e.toString(),
       }))
     }
 
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isLoading: false,
     }))
   }
 
   const getFromCacheSecure = async () => {
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isSuccess: true,
       isLoading: false,
@@ -162,8 +164,8 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
     try {
       const str = await SecureStore.getItemAsync(options.key!)
       if (str) {
-        _setData(JSON.parse(str))
-        _setStatus((old) => ({
+        setData(JSON.parse(str))
+        setStatus((old) => ({
           ...old,
           isSuccess: true,
         }))
@@ -171,29 +173,29 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         throw 'not found'
       }
     } catch (e) {
-      _setStatus((old) => ({
+      setStatus((old) => ({
         ...old,
         isError: true,
         errorMessage: e.toString(),
       }))
     }
 
-    _setStatus((old) => ({
+    setStatus((old) => ({
       ...old,
       isLoading: false,
     }))
   }
 
   return {
-    data: () => _data,
+    data,
     run,
     cache,
     getFromCache,
     cacheSecure,
     getFromCacheSecure,
-    status: () => _status,
+    status,
     setData: (data: any) => {
-      _setData(data)
+      setData(data)
     },
   }
 }

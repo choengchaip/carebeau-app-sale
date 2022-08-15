@@ -19,10 +19,10 @@ export const Login = (props: IProps) => {
   })
 
   useEffect(() => {
-    if (login.status().isSuccess) {
+    if (login.status.isSuccess) {
       props.navigation.push(AppPage.Job.key)
     }
-  }, [login.status().isSuccess])
+  }, [login.status.isSuccess])
 
   return (
     <>
