@@ -1,6 +1,7 @@
 import {IProps} from "../../../../cores/types.core";
 
 export interface ICardProps extends IProps {
+  type: 'new' | 'own'
   jobNo: string
   expiredIn: string
   storeName: string

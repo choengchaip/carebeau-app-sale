@@ -9,7 +9,6 @@ export const Filter = (props: { items: IJobItem[] } & IProps) => {
   const [count, setCount] = useState<{ [key: string]: number }>({})
 
   useMount(() => {
-    setCount({})
     props.items.forEach((item: IJobItem) => {
       switch (item.job_type) {
         case 'เปิดร้านค้าใหม่':
@@ -41,39 +40,39 @@ export const Filter = (props: { items: IJobItem[] } & IProps) => {
   })
 
   return (
-    <ScrollView py={7} horizontal={true}>
-      <HStack space={'md'}>
+    <ScrollView py={5} horizontal={true}>
+      <HStack space={'xs'}>
         <Pressable onPress={() => setState(0)}>
-          <Badge bg={state === 0 ? 'danger.500' : 'white'} rounded={'lg'} borderColor={'danger.500'}>
-            <Text fontFamily={'medium'} color={state === 0 ? 'white' : 'danger.500'}>
+          <Badge bg={state === 0 ? 'danger.500' : 'white'} rounded={'sm'} borderColor={'danger.500'}>
+            <Text fontFamily={'medium'} fontSize={'xs'} color={state === 0 ? 'white' : 'danger.500'}>
               ทั้งหมด ({props.items.length || 0})
             </Text>
           </Badge>
         </Pressable>
         <Pressable onPress={() => setState(1)}>
-          <Badge bg={state === 1 ? 'danger.500' : 'white'} rounded={'lg'} borderColor={'danger.500'}>
-            <Text fontFamily={'medium'} color={state === 1 ? 'white' : 'danger.500'}>
+          <Badge bg={state === 1 ? 'danger.500' : 'white'} rounded={'sm'} borderColor={'danger.500'}>
+            <Text fontFamily={'medium'} fontSize={'xs'} color={state === 1 ? 'white' : 'danger.500'}>
               เปิดร้านค้าใหม่ ({count['เปิดร้านค้าใหม่'] || 0})
             </Text>
           </Badge>
         </Pressable>
         <Pressable onPress={() => setState(2)}>
-          <Badge bg={state === 2 ? 'danger.500' : 'white'} rounded={'lg'} borderColor={'danger.500'}>
-            <Text fontFamily={'medium'} color={state === 2 ? 'white' : 'danger.500'}>
+          <Badge bg={state === 2 ? 'danger.500' : 'white'} rounded={'sm'} borderColor={'danger.500'}>
+            <Text fontFamily={'medium'} fontSize={'xs'} color={state === 2 ? 'white' : 'danger.500'}>
               รับคืนสินค้า ({count['รับคืนสินค้า'] || 0})
             </Text>
           </Badge>
         </Pressable>
         <Pressable onPress={() => setState(3)}>
-          <Badge bg={state === 3 ? 'danger.500' : 'white'} rounded={'lg'} borderColor={'danger.500'}>
-            <Text fontFamily={'medium'} color={state === 3 ? 'white' : 'danger.500'}>
+          <Badge bg={state === 3 ? 'danger.500' : 'white'} rounded={'sm'} borderColor={'danger.500'}>
+            <Text fontFamily={'medium'} fontSize={'xs'} color={state === 3 ? 'white' : 'danger.500'}>
               รับคืนฝาแสตมป์ ({count['รับคืนฝาแสตมป์'] || 0})
             </Text>
           </Badge>
         </Pressable>
         <Pressable onPress={() => setState(4)}>
-          <Badge bg={state === 4 ? 'danger.500' : 'white'} rounded={'lg'} borderColor={'danger.500'}>
-            <Text fontFamily={'medium'} color={state === 4 ? 'white' : 'danger.500'}>
+          <Badge bg={state === 4 ? 'danger.500' : 'white'} rounded={'sm'} borderColor={'danger.500'}>
+            <Text fontFamily={'medium'} fontSize={'xs'} color={state === 4 ? 'white' : 'danger.500'}>
               แจ้งรับคืน ({count['แจ้งรับคืน'] || 0})
             </Text>
           </Badge>

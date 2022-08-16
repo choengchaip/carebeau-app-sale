@@ -2,9 +2,10 @@ import {IProps} from "../../cores/types.core";
 import {CardOpenStore} from "./shares/cards/CardOpenStore";
 import {IJobItem} from "../../models/job.model";
 
-export const JobListItem = (props: { item: IJobItem } & IProps) => {
+export const JobListItem = (props: { item: IJobItem, type: 'new' | 'own' } & IProps) => {
   return (
     <CardOpenStore
+      type={props.type}
       jobNo={props.item.job_no}
       expiredIn={props.item.time}
       storeName={props.item.store_name}

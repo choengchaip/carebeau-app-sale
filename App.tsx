@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, extendTheme, NativeBaseProvider, Spinner} from "native-base";
+import {Box, extendTheme, NativeBaseProvider, Spinner, StatusBar} from "native-base";
 import {AppPage} from "./src/consts/page.const";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
@@ -11,6 +11,7 @@ import {
   Prompt_700Bold,
   useFonts
 } from "@expo-google-fonts/prompt";
+import {LogBox} from "react-native";
 
 // Define the config
 const config = {
@@ -51,7 +52,10 @@ declare module "native-base" {
   }
 }
 
+LogBox.ignoreAllLogs(true)
+
 const Stack = createNativeStackNavigator();
+
 const getRoutes = (): { key: string, component: any }[] => {
   let routes: { key: string, component: any }[] = []
 
@@ -86,6 +90,7 @@ export const Setup = () => {
 
   return (
     <NavigationContainer>
+      <StatusBar barStyle={'dark-content'}/>
       <Stack.Navigator initialRouteName={AppPage.Middleware.key}>
         {getRoutes().map((item) => {
           return <Stack.Screen

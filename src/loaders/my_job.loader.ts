@@ -14,7 +14,7 @@ export const useMyJob = () => {
       const me = JSON.parse(str || '{}')
 
       return {
-        'Authorization': `Bearer ${me?.device_token}`,
+        Authorization: `Bearer ${me?.device_token}`,
       }
     },
   })

@@ -53,10 +53,17 @@ export class Requester {
   }
 
   public create<T>(method: Method, path: string, payload: any, options: AxiosRequestConfig = {}): Promise<IResponse<T>> {
+    let newPayload = undefined
+
+    // TODO: Have to do this because of ios shit!
+    if (Object.keys(payload).length > 0) {
+      newPayload = JSON.stringify(payload)
+    }
+
     return this.service({
       method: method,
       url: path,
-      data: payload,
+      data: newPayload,
       ...this.options,
       ...options,
     }) as any

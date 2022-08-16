@@ -23,11 +23,11 @@ export const useLogin = () => {
 
       await storage.setItem(JSON.stringify({
         ...me,
-        ...data,
+        ...data.data,
       }))
       await SecureStore.setItemAsync('me', JSON.stringify({
         ...me,
-        ...data,
+        ...data.data,
       }))
     },
   })

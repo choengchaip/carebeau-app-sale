@@ -1,35 +1,39 @@
 import {useMount} from "../../hooks/core.hook";
-import {Box, Spinner} from "native-base";
+import {Box, Spinner, useToast} from "native-base";
 import {IProps} from "../../cores/types.core";
 import {useMe} from "../../loaders/auths/me.loader";
-import {useEffect} from "react";
+import {useRouter} from "../../hooks/router.hook";
+import {useWatchErrorWithToast, useWatchSuccess} from "../../hooks/watch.hook";
 import {AppPage} from "../../consts/page.const";
 
 export const Middleware = (props: IProps) => {
+  const router = useRouter()
+  const toast = useToast()
   const me = useMe()
 
-  useMount(() => {
-    me.setData({
-      device_token: '213|jOWz93sI3b2CMPtuWWIL6aVljopdGNEIENJuMcZS',
-    })
+  useMount(async () => {
+    await me.getFromCacheSecure()
   })
 
-  useEffect(() => {
+  useWatchSuccess(me.statusCache, () => {
     if (me.data) {
-      me.cache();
+      router.push(AppPage.Job.key)
+    } else {
+      router.push(AppPage.Login.key)
     }
-  }, [me.data])
+  })
 
-  useEffect(() => {
-    if (me.status.isSuccess && !me.status.isLoading) {
-      props.navigation.push(AppPage.Job.key)
-      // props.navigation.push(AppPage.Login.key)
-    }
-  }, [me.status.isSuccess, me.status.isLoading])
+  useWatchErrorWithToast(toast, me.statusCache)
+
+  useWatchSuccess(me.statusCacheSecure, async () => {
+    await me.cache()
+  })
+
+  useWatchErrorWithToast(toast, me.statusCacheSecure)
 
   return (
     <Box height={'100%'} width={'100%'} justifyContent={'center'} alignSelf={'center'} bg={'white'}>
-      <Spinner/>
+      <Spinner color={'danger.500'}/>
     </Box>
   )
 }
