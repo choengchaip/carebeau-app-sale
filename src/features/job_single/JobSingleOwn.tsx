@@ -1,27 +1,20 @@
 import {IProps} from "../../cores/types.core";
 import {useMount} from "../../hooks/core.hook";
 import {useRouter} from "../../hooks/router.hook";
-import {
-  AspectRatio,
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Icon,
-  Image,
-  ScrollView,
-  Spinner,
-  Text,
-  useToast,
-  VStack
-} from "native-base";
+import {Badge, Box, HStack, Icon, ScrollView, Spinner, Text, useToast, VStack} from "native-base";
 import {BackBar} from "../../components/BackBar";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {useMyJobDetail} from "../../loaders/my_job_detail.loader";
-import {useWatchErrorWithToast, useWatchSuccess} from "../../hooks/watch.hook";
+import {useWatchErrorWithToast} from "../../hooks/watch.hook";
 import {FadeIn} from "../../components/FadeIn";
+import {FormTimeInput} from "../../components/forms/FormTimeInput";
+import {useForm} from "../../hooks/form.hook";
+import {FormDateInput} from "../../components/forms/FormDateInput";
+import {get} from "lodash";
+import {MyButton} from "../../components/uis/MyButton";
 
 export const JobSingleOwn = (props: IProps) => {
+  const form = useForm<{ date: string, time: string }>()
   const router = useRouter()
   const job = useMyJobDetail()
   const toast = useToast()
@@ -31,6 +24,32 @@ export const JobSingleOwn = (props: IProps) => {
       job_no: router.params.job_no,
     })
   })
+
+  const validate = (): boolean => {
+    form.setError({})
+
+    if (!get(form.form, 'date', false)) {
+      form.setError({
+        ...form.error,
+        date: 'กรุณาเลือกวันนัดหมาย',
+      })
+      return false
+    }
+    if (!get(form.form, 'time', false)) {
+      form.setError({
+        ...form.error,
+        time: 'กรุณาเลือกวันเวลา',
+      })
+      return false
+    }
+
+    return true
+  }
+
+  const onAppointment = () => {
+    if (validate()) {
+    }
+  }
 
   useWatchErrorWithToast(toast, job.status, () => {
     router.goBack()
@@ -55,7 +74,7 @@ export const JobSingleOwn = (props: IProps) => {
             {/* 1 */}
             <HStack bg={'danger.500'} py={3} px={5}>
               <Icon as={MaterialCommunityIcons} name={'store'} color={'white'} size={5} mr={2}/>
-              <Text fontFamily={'light'} fontSize={'sm'} color={'white'}>
+              <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
                 เปิดร้านค้าใหม่
               </Text>
             </HStack>
@@ -101,7 +120,7 @@ export const JobSingleOwn = (props: IProps) => {
             {/* 2 */}
             <HStack bg={'danger.500'} py={3} px={5}>
               <Icon as={MaterialCommunityIcons} name={'map-legend'} color={'white'} size={5} mr={2}/>
-              <Text fontFamily={'light'} fontSize={'sm'} color={'white'}>
+              <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
                 ที่อยู่ร้านค้า
               </Text>
             </HStack>
@@ -151,9 +170,9 @@ export const JobSingleOwn = (props: IProps) => {
                   <Text fontFamily={'light'} fontSize={'sm'} color={'black'} ml={'auto'} mr={2}>
                     081-234-5678
                   </Text>
-                  <Badge bg={'emerald.500'} rounded={'xs'} py={0} px={2}>
+                  <Badge bg={'emerald.500'} rounded={'xs'} py={0} px={1}>
                     <HStack alignItems={'center'}>
-                      <Icon as={MaterialCommunityIcons} name={'phone-outline'} color={'white'} size={4} mr={2}/>
+                      <Icon as={MaterialCommunityIcons} name={'phone-outline'} color={'white'} size={4} mr={1}/>
                       <Text fontFamily={'semi_bold'} fontSize={'sm'} color={'white'}>
                         โทร
                       </Text>
@@ -185,7 +204,8 @@ export const JobSingleOwn = (props: IProps) => {
                   จุดสังเกตุ
                 </Text>
               </HStack>
-              <Box mx={5} px={4} pt={3} pb={12} borderWidth={1} borderColor={'muted.200'} rounded={'md'} bg={'muted.50'}>
+              <Box mx={5} px={4} pt={3} pb={12} borderWidth={1} borderColor={'muted.200'} rounded={'md'}
+                   bg={'muted.50'}>
                 <Text fontFamily={'light'}>
                   ซอยพหลโยธิน 40 พหลโยธิน ซอย 40.
                 </Text>
@@ -195,7 +215,7 @@ export const JobSingleOwn = (props: IProps) => {
             {/* 3 */}
             <HStack bg={'danger.500'} py={3} px={5}>
               <Icon as={MaterialCommunityIcons} name={'store'} color={'white'} size={5} mr={2}/>
-              <Text fontFamily={'light'} fontSize={'sm'} color={'white'}>
+              <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
                 การนัดหมาย
               </Text>
             </HStack>
@@ -205,56 +225,56 @@ export const JobSingleOwn = (props: IProps) => {
                 <Text fontFamily={'light'} fontSize={'sm'} color={'black'}>
                   กรุณาระบุวันที่นัดหมาย*
                 </Text>
-                <HStack borderWidth={1} borderColor={'danger.500'} w={150} maxW={150} py={2} px={2} rounded={'sm'}
-                        ml={'auto'} alignItems={'center'}>
-                  <Text fontFamily={'medium'} mr={6}>
-                    27-05-2563
-                  </Text>
-                  <Badge bg={'danger.500'} p={1} ml={'auto'}>
-                    <Icon as={MaterialCommunityIcons} name={'calendar'} color={'white'} size={5}/>
-                  </Badge>
-                </HStack>
+                <FormDateInput
+                  w={150}
+                  maxW={150}
+                  ml={'auto'}
+                  name={'date'}
+                  form={form}
+                  inputStyle={{
+                    borderWidth: 1,
+                    borderColor: 'danger.500',
+                  }}/>
               </HStack>
-              <HStack px={5} alignItems={'center'}>
+              <HStack
+                px={5}
+                mb={6}
+                alignItems={'center'}>
                 <Icon as={MaterialCommunityIcons} name={'map-legend'} color={'muted.300'} size={5} mr={2}/>
                 <Text fontFamily={'light'} fontSize={'sm'} color={'black'}>
                   กรุณาระบุเวลานัดหมาย*
                 </Text>
-                <HStack borderWidth={1} borderColor={'danger.500'} w={150} maxW={150} py={2} px={2} rounded={'sm'}
-                        ml={'auto'} alignItems={'center'}>
-                  <Text fontFamily={'medium'} mr={6}>
-                    10:00
-                  </Text>
-                  <Badge bg={'danger.500'} p={1} ml={'auto'}>
-                    <Icon as={MaterialCommunityIcons} name={'clock'} color={'white'} size={5}/>
-                  </Badge>
-                </HStack>
+                <FormTimeInput
+                  w={150}
+                  maxW={150}
+                  ml={'auto'}
+                  name={'time'}
+                  form={form}
+                  inputStyle={{
+                    borderWidth: 1,
+                    borderColor: 'danger.500',
+                  }}/>
+              </HStack>
+              <HStack space={6} px={5}>
+                <MyButton
+                  flex={3}
+                  onPress={() => {
+                    router.goBack()
+                  }}
+                  colorScheme={'dark'}
+                  color={'black'}
+                  fontFamily={'medium'}
+                  title={'ยกเลิก'}/>
+                <MyButton
+                  flex={5}
+                  isLoading={false}
+                  onPress={onAppointment}
+                  colorScheme={'danger'}
+                  fontFamily={'medium'}
+                  title={'ยืนยันนัดหมาย'}/>
               </HStack>
             </VStack>
           </VStack>
-
-          <HStack space={6} px={5}>
-            <Button
-              flex={3}
-              onPress={() => {
-              }}
-              height={12}
-              colorScheme="dark">
-              <Text fontFamily={'medium'} fontSize={'sm'} color={'black'}>
-                ยกเลิก
-              </Text>
-            </Button>
-            <Button
-              flex={5}
-              onPress={() => {
-              }}
-              height={12}
-              colorScheme="danger">
-              <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
-                ยืนยันการรับงาน
-              </Text>
-            </Button>
-          </HStack>
         </FadeIn>
       </ScrollView>
     </VStack>

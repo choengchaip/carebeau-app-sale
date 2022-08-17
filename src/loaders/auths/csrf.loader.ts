@@ -13,14 +13,11 @@ export const useCSRF = () => {
 
       if (get(headers, 'set-cookie[0]', false)) {
         let tokenReg = RegExp(`XSRF-TOKEN=[a-zA-Z0-9%;]+`)
-        let careReg = RegExp(`carebeauplus_session=[a-zA-Z0-9%]+`)
-
-        let token = get(tokenReg.exec(get(headers, 'set-cookie[0]', false)), '[0]', '')
-        let care = get(careReg.exec(get(headers, 'set-cookie[0]', false)), '[0]', '')
+        let tokenRaw = get(tokenReg.exec(get(headers, 'set-cookie[0]', false)), '[0]', '')
+        let token = decodeURIComponent(tokenRaw.replace('XSRF-TOKEN=', ''))
 
         await storage.setItem(JSON.stringify({
-          csrf: decodeURIComponent(get(headers, 'set-cookie[0]', false).replace(/;.+/g, '').replace(/.+=/g, '')),
-          cookie: `${token} ${care}`,
+          csrf: token,
         }))
       }
     }

@@ -6,7 +6,7 @@ export const useWatchSuccess = (status: IStatus, cb: () => void) => {
     if (status.isSuccess && !status.isLoading) {
       cb()
     }
-  }, [status.isSuccess && !status.isLoading])
+  }, [status.isSuccess && status.isLoading])
 }
 
 export const useWatchError = (status: IStatus, cb: () => void) => {

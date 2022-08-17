@@ -13,7 +13,6 @@ export const useLogin = () => {
 
       return {
         'X-XSRF-TOKEN': me.csrf,
-        'Cookie': me.cookie,
       }
     },
     onSuccess: async (data) => {

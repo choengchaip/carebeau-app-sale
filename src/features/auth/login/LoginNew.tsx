@@ -1,25 +1,27 @@
 import {IProps} from "../../../cores/types.core";
-import {Box, Button, FormControl, Image, Input, ScrollView, Text, VStack, WarningOutlineIcon} from "native-base";
-import {useState} from "react";
-import {ComponentUtil} from "../../../utils/component.util";
+import {Box, Image, ScrollView, Text, VStack} from "native-base";
+import {IStatus} from "../../../hooks/types.hook";
+import {FormTextInput} from "../../../components/forms/FormTextInput";
+import {MyButton} from "../../../components/uis/MyButton";
+import {useForm} from "../../../hooks/form.hook";
+import {get} from "lodash";
 
-export const LoginNew = (props: { onLogin: (form: any) => void } & IProps) => {
-  const [form, setForm] = useState<any>({})
-  const [error, setError] = useState<any>({})
+export const LoginNew = (props: { status: IStatus, onLogin: (form: any) => void } & IProps) => {
+  const form = useForm()
 
   const validate = (): boolean => {
-    setError({})
+    form.setError({})
 
-    if (form.email === undefined || !form.email) {
-      setError({
-        ...error,
+    if (!get(form.form, 'email', false)) {
+      form.setError({
+        ...form.error,
         email: 'กรุณากรอกอีเมล',
       })
       return false
     }
-    if (form.password === undefined || !form.password) {
-      setError({
-        ...error,
+    if (!get(form.form, 'password', false)) {
+      form.setError({
+        ...form.error,
         password: 'กรุณากรอกรหัสผ่าน',
       })
       return false
@@ -31,8 +33,8 @@ export const LoginNew = (props: { onLogin: (form: any) => void } & IProps) => {
   const onLogin = async () => {
     if (validate()) {
       props.onLogin({
-        "email": form.email,
-        "password": form.password,
+        "email": form.form.email,
+        "password": form.form.password,
         "device_name": "mobile"
       })
     }
@@ -42,59 +44,44 @@ export const LoginNew = (props: { onLogin: (form: any) => void } & IProps) => {
     <Box flex={1} bg={'white'} safeArea>
       <ScrollView flex={1} bg={'white'} py={'8'}>
         <VStack space={'xs'}>
-          <Image source={require('../../../../assets/features/auths/img_1.png')} alt={'nothing'} height={75} width={75}
-                 mx={'auto'} mb={'4'}/>
-          <Text fontSize={22} fontFamily={'medium'} color={'muted.600'} textAlign={'center'}>
+          <Image
+            source={require('../../../../assets/features/auths/img_1.png')}
+            alt={'nothing'}
+            height={60}
+            width={60}
+            mx={'auto'}
+            mb={2}/>
+          <Text fontSize={'lg'} fontFamily={'medium'} color={'muted.600'} textAlign={'center'}>
             ลงทะเบียนลูกค้าเก่า
           </Text>
-          <Text fontSize={16} fontFamily={'light'} color={'muted.500'} textAlign={'center'} mb={6}>
+          <Text fontSize={'sm'} fontFamily={'light'} color={'muted.500'} textAlign={'center'} mb={6}>
             ติดต่อขอรหัสจาก Sales ที่ดูแลร้านค้าของคุณ
           </Text>
           <VStack mx={10} space={2}>
-            <FormControl mb={4} isRequired isInvalid={'email' in error}>
-              <VStack>
-                <Input
-                  placeholder="เบอร์มือถือ - อีเมล"
-                  borderColor={'muted.300'}
-                  px={4}
-                  fontFamily={'medium'}
-                  fontSize={16}
-                  placeholderTextColor={'muted.400'}
-                  onChangeText={(value) => setForm({...form, email: value})}/>
-                {ComponentUtil.renderCondition(() => error.email, (
-                  <FormControl.ErrorMessage>
-                    {error.email}
-                  </FormControl.ErrorMessage>
-                ))}
-              </VStack>
-            </FormControl>
-            <FormControl mb={4} isRequired isInvalid={'password' in error}>
-              <VStack>
-                <Input
-                  type={'password'}
-                  placeholder="รหัสผ่าน"
-                  borderColor={'muted.300'}
-                  px={4}
-                  fontFamily={'medium'}
-                  fontSize={16}
-                  placeholderTextColor={'muted.400'}
-                  onChangeText={(value) => setForm({...form, password: value})}/>
-                {ComponentUtil.renderCondition(() => 'password' in error, (
-                  <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>
-                    {error.password}
-                  </FormControl.ErrorMessage>
-                ))}
-              </VStack>
-            </FormControl>
-            <Button onPress={onLogin} height={12} width={'100%'} colorScheme="danger">
-              <Text fontFamily={'bold'} fontSize={16} color={'white'}>
-                ลงชื่อเข้าใช้
-              </Text>
-            </Button>
+            <FormTextInput
+              name={'email'}
+              placeholder={'เบอร์มือถือ - อีเมล'}
+              form={form}/>
+            <FormTextInput
+              name={'password'}
+              type={'password'}
+              placeholder={'รหัสผ่าน'}
+              form={form}/>
+            <MyButton
+              isLoading={props.status.isLoading}
+              onPress={onLogin}
+              title={'ลงชื่อเข้าใช้'}/>
           </VStack>
-          <Image source={require('../../../../assets/features/auths/img_2.png')} alt={'nothing'} height={154}
-                 width={310} mx={'auto'} my={8}/>
-          <Text fontFamily={'light'} color={'black'} textAlign={'center'}>
+          <Image
+            source={require('../../../../assets/features/auths/img_2.png')}
+            alt={'nothing'}
+            height={145}
+            width={310} mx={'auto'} my={8}/>
+          <Text
+            fontFamily={'light'}
+            fontSize={'sm'}
+            color={'black'}
+            textAlign={'center'}>
             หากมีปัญหาการเข้าใช้งาน <Text fontFamily={'light'} color={'primary.600'}>ติดต่อฝ่ายลูกค้าสัมพันธ์</Text>
           </Text>
         </VStack>

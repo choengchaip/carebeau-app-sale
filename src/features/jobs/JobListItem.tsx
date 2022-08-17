@@ -9,6 +9,7 @@ export const JobListItem = (props: { item: IJobItem, type: 'new' | 'own' } & IPr
       jobNo={props.item.job_no}
       expiredIn={props.item.time}
       storeName={props.item.store_name}
+      storeCode={props.item.store_code}
       storeProvince={props.item.province}
       customerName={props.item.customer_name}
       customerMobile={props.item.customer_phone}

@@ -13,7 +13,21 @@ import {
 } from "@expo-google-fonts/prompt";
 import {LogBox} from "react-native";
 
-// Define the config
+const colors = {
+  success: {
+    50: '#bafff4',
+    100: '#9fefdd',
+    200: '#75dec4',
+    300: '#58cebb',
+    400: '#3DC9B3',
+    500: '#24b2a1',
+    600: '#13b29b',
+    700: '#008f7a',
+    800: '#006959',
+    900: '#004637',
+  }
+}
+
 const config = {
   useSystemColorMode: false,
   initialColorMode: "light",
@@ -36,7 +50,6 @@ const config = {
       },
     }
   },
-
   fonts: {
     heading: 'Prompt',
     body: 'Prompt',
@@ -45,7 +58,7 @@ const config = {
 }
 
 // extend the theme
-export const theme = extendTheme({config});
+export const theme = extendTheme({colors, config});
 type MyThemeType = typeof theme;
 declare module "native-base" {
   interface ICustomTheme extends MyThemeType {

@@ -4,6 +4,7 @@ import {ICardProps} from "./types";
 import {ComponentUtil} from "../../../../utils/component.util";
 import {AppPage} from "../../../../consts/page.const";
 import {useRouter} from "../../../../hooks/router.hook";
+import {MyButton} from "../../../../components/uis/MyButton";
 
 export const CardOpenStore = (props: ICardProps) => {
   const router = useRouter()
@@ -18,7 +19,7 @@ export const CardOpenStore = (props: ICardProps) => {
       bg={'white'}
       shadow={2}
       mb={5}>
-      <HStack bg={'danger.500'} py={1} px={2}>
+      <HStack bg={'danger.500'} py={3} px={2}>
         <Icon as={MaterialCommunityIcons} name={'store'} color={'white'} size={5} mr={2}/>
         <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
           เปิดร้านค้าใหม่
@@ -90,7 +91,7 @@ export const CardOpenStore = (props: ICardProps) => {
           </HStack>
         ))}
       </VStack>
-      <Button
+      <MyButton
         mx={3}
         mb={3}
         onPress={() => {
@@ -101,6 +102,7 @@ export const CardOpenStore = (props: ICardProps) => {
                 job_no: props.jobNo,
                 time: props.expiredIn,
                 store_name: props.storeName,
+                store_code: props.storeCode,
                 province: props.storeProvince,
                 customer_name: props.customerName,
                 customer_phone: props.customerMobile,
@@ -115,11 +117,11 @@ export const CardOpenStore = (props: ICardProps) => {
             })
           }
         }}
-        colorScheme={'dark'}>
-        <Text fontFamily={'medium'} fontSize={'sm'} color={'black'}>
-          ดูรายละเอียด
-        </Text>
-      </Button>
+        colorScheme={'dark'}
+        color={'black'}
+        fontFamily={'medium'}
+        title={'ดูรายละเอียด'}>
+      </MyButton>
     </VStack>
   )
 }

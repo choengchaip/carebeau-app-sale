@@ -43,7 +43,6 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         headers = await options.getHeaders(storage)
       }
 
-      // TODO: have to do like this because of ios shit!
       const response = await NewRequester.create<any>(options.method, options.getURL(payload), payload, {
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +64,6 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         await options.onSuccess(response.data, response.headers)
       }
     } catch (e) {
-      // console.log(JSON.stringify(e.response))
       setStatus((old) => ({
         ...old,
         isError: true,
@@ -88,7 +86,7 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
     setStatusCache((old) => ({
       ...old,
       isSuccess: false,
-      isLoading: false,
+      isLoading: true,
     }))
     const storage = useAsyncStorage(options.key!)
 
@@ -161,6 +159,7 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         isSuccess: true,
       }))
     } catch (e) {
+      console.log('cache secure', e)
       setStatusCacheSecure((old) => ({
         ...old,
         isError: true,
@@ -193,7 +192,7 @@ export const useLoader = <A = any, B = any>(options: ILoaderOptions<A, B>) => {
         throw 'not found'
       }
     } catch (e) {
-      console.log('e' ,e)
+      console.log('get cache secure', e)
       setStatusCacheSecure((old) => ({
         ...old,
         isError: true,

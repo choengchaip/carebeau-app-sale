@@ -4,7 +4,12 @@ import {AspectRatio, Button, HStack, Icon, Image, ScrollView, Text, useToast, VS
 import {BackBar} from "../../components/BackBar";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {IJobItem} from "../../models/job.model";
-import {useMount} from "../../hooks/core.hook";
+import {useNewJobConfirm} from "../../loaders/new_job_confirm.loader";
+import {useWatchErrorWithToast, useWatchSuccess} from "../../hooks/watch.hook";
+import {useDialog} from "../../hooks/dialog.hook";
+import {MyDialog} from "../../components/hooks/MyDialog";
+import {AppPage} from "../../consts/page.const";
+import {MyButton} from "../../components/uis/MyButton";
 
 export interface IJobSingleNewProps extends IProps {
   data: IJobItem
@@ -12,14 +17,26 @@ export interface IJobSingleNewProps extends IProps {
 
 export const JobSingleNew = (props: IJobSingleNewProps) => {
   const router = useRouter()
+  const confirm = useNewJobConfirm()
   const toast = useToast()
+  const dialog = useDialog()
 
-  useMount(() => {
-    console.log(router.params)
+  useWatchSuccess(confirm.status, () => {
+    dialog.success({
+      title: 'สำเร็จ',
+      description: 'ทำรายการประเมินเครดิตเรียบร้อยแล้ว',
+      duration: 3000,
+      onFinish: () => {
+        router.push(AppPage.Job.key)
+      }
+    })
   })
+  useWatchErrorWithToast(toast, confirm.status)
 
   return (
     <VStack flex={1} bg={'white'} safeArea>
+      <MyDialog dialog={dialog}/>
+
       <BackBar title={'รายละเอียดงาน'}/>
       <ScrollView
         flex={1}
@@ -27,7 +44,7 @@ export const JobSingleNew = (props: IJobSingleNewProps) => {
         <VStack space={4} mb={6}>
           <HStack bg={'danger.500'} py={3} px={5}>
             <Icon as={MaterialCommunityIcons} name={'store'} color={'white'} size={5} mr={2}/>
-            <Text fontFamily={'light'} fontSize={'sm'} color={'white'}>
+            <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
               เปิดร้านค้าใหม่
             </Text>
           </HStack>
@@ -77,7 +94,8 @@ export const JobSingleNew = (props: IJobSingleNewProps) => {
             rounded={'md'}
             source={{
               uri: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmV0YWlsJTIwc3RvcmV8ZW58MHx8MHx8&w=1000&q=80',
-            }}/>
+            }}
+            alt={'nothing'}/>
         </AspectRatio>
         <VStack
           mx={5}
@@ -103,26 +121,27 @@ export const JobSingleNew = (props: IJobSingleNewProps) => {
           </Text>
         </VStack>
         <HStack space={6} px={5}>
-          <Button
+          <MyButton
             flex={3}
             onPress={() => {
+              router.goBack()
             }}
-            height={12}
-            colorScheme="dark">
-            <Text fontFamily={'medium'} fontSize={'sm'} color={'black'}>
-              ยกเลิก
-            </Text>
-          </Button>
-          <Button
+            colorScheme={'dark'}
+            color={'black'}
+            fontFamily={'medium'}
+            title={'ยกเลิก'}/>
+          <MyButton
             flex={5}
-            onPress={() => {
+            isLoading={confirm.status.isLoading}
+            onPress={async () => {
+              await confirm.run({
+                store_code: props.data.store_code,
+                job_no: props.data.job_no,
+              })
             }}
-            height={12}
-            colorScheme="danger">
-            <Text fontFamily={'medium'} fontSize={'sm'} color={'white'}>
-              ยืนยันการรับงาน
-            </Text>
-          </Button>
+            colorScheme={'danger'}
+            fontFamily={'medium'}
+            title={'ยืนยันการรับงาน'}/>
         </HStack>
       </ScrollView>
     </VStack>

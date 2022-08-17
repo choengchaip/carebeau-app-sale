@@ -5,6 +5,7 @@ export interface ICardProps extends IProps {
   jobNo: string
   expiredIn: string
   storeName: string
+  storeCode: string
   storeProvince: string
   customerName: string
   customerMobile?: string
