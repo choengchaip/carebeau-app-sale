@@ -42,7 +42,11 @@ export const LoginNew = (props: { status: IStatus, onLogin: (form: any) => void 
 
   return (
     <Box flex={1} bg={'white'} safeArea>
-      <ScrollView flex={1} bg={'white'} py={'8'}>
+      <ScrollView
+        flex={1}
+        bg={'white'}
+        py={'8'}
+        bounces={false}>
         <VStack space={'xs'}>
           <Image
             source={require('../../../../assets/features/auths/img_1.png')}

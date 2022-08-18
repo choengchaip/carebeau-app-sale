@@ -30,7 +30,8 @@ export const MyDialogSuccess = (props: { title: string, description: string, isS
               </Text>
               <Text
                 fontFamily={'medium'}
-                fontSize={'sm'}
+                fontSize={'xs'}
+                textAlign={'center'}
                 color={'muted.500'}>
                 {props.description}
               </Text>

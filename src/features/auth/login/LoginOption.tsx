@@ -5,7 +5,11 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 export const LoginOption = (props: { onNext: (c: number) => void } & IProps) => {
   return (
     <Box flex={1} bg={'muted.100'} safeArea>
-      <ScrollView flex={1} bg={'white'} pb={'8'}>
+      <ScrollView
+        flex={1}
+        bg={'white'}
+        pb={'8'}
+        bounces={false}>
         <HStack
           justifyContent={'center'}
           bg={'muted.100'}

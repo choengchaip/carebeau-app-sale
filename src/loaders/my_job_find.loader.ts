@@ -2,7 +2,7 @@ import {useLoader} from "../hooks/loader.hook";
 import {Core} from "../cores/core.core";
 import {IJob} from "../models/job.model";
 
-export const useMyJobDetail = () => {
+export const useMyJobFind = () => {
   return useLoader<IJob, { job_no: string }>({
     method: 'post',
     getURL: () => Core.DefaultAPI('/api/sale/get-my-job-detail'),

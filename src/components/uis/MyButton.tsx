@@ -10,6 +10,7 @@ export interface IMyButtonProps extends IProps, IButtonProps {
 
 export const MyButton = (props: IMyButtonProps) => {
   return <Button
+    {...props}
     isLoading={props.isLoading}
     _loading={{
       py: props._loading?.py || '12.5px',
@@ -19,8 +20,7 @@ export const MyButton = (props: IMyButtonProps) => {
     }}
     px={props.px || 2}
     py={props.py || 3}
-    colorScheme={props.colorScheme || 'danger'}
-    {...props}>
+    colorScheme={props.colorScheme || 'danger'}>
     <Text
       fontFamily={props.fontFamily || 'semi_bold'}
       fontSize={props.fontSize || 'sm'}

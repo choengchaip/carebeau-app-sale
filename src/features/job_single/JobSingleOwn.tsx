@@ -4,20 +4,28 @@ import {useRouter} from "../../hooks/router.hook";
 import {Badge, Box, HStack, Icon, ScrollView, Spinner, Text, useToast, VStack} from "native-base";
 import {BackBar} from "../../components/BackBar";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {useMyJobDetail} from "../../loaders/my_job_detail.loader";
-import {useWatchErrorWithToast} from "../../hooks/watch.hook";
+import {useMyJobFind} from "../../loaders/my_job_find.loader";
+import {useWatchErrorWithToast, useWatchSuccess} from "../../hooks/watch.hook";
 import {FadeIn} from "../../components/FadeIn";
 import {FormTimeInput} from "../../components/forms/FormTimeInput";
 import {useForm} from "../../hooks/form.hook";
 import {FormDateInput} from "../../components/forms/FormDateInput";
 import {get} from "lodash";
 import {MyButton} from "../../components/uis/MyButton";
+import {useMyJobAppointment} from "../../loaders/my_job_appointment.loader";
+import {MyDialog} from "../../components/hooks/MyDialog";
+import {useDialog} from "../../hooks/dialog.hook";
+import {AppPage} from "../../consts/page.const";
+import moment from "moment";
 
 export const JobSingleOwn = (props: IProps) => {
   const form = useForm<{ date: string, time: string }>()
   const router = useRouter()
-  const job = useMyJobDetail()
   const toast = useToast()
+  const dialog = useDialog()
+
+  const job = useMyJobFind()
+  const appointment = useMyJobAppointment()
 
   useMount(async () => {
     await job.run({
@@ -46,14 +54,30 @@ export const JobSingleOwn = (props: IProps) => {
     return true
   }
 
-  const onAppointment = () => {
+  const onAppointment = async () => {
     if (validate()) {
+      await appointment.run({
+        job_no: job.data?.data.job_detail_data.job_no!,
+        appointment_date: moment(form.form!.date).add('year', 543).format('DD-MM-YYYY'),
+        appointment_time: form.form!.time,
+      })
     }
   }
 
   useWatchErrorWithToast(toast, job.status, () => {
     router.goBack()
   })
+
+  useWatchSuccess(appointment.status, () => {
+    dialog.success({
+      title: 'สำเร็จ',
+      description: 'ทำการยืนยันการนัดหมายลูกค้าเรียบร้อยแล้ว',
+      onFinish: () => {
+        router.push(AppPage.Job.key)
+      }
+    })
+  })
+  useWatchErrorWithToast(toast, appointment.status)
 
   if (job.status.isLoading || !job.status.isSuccess) {
     return (
@@ -65,6 +89,7 @@ export const JobSingleOwn = (props: IProps) => {
 
   return (
     <VStack flex={1} bg={'white'} safeArea>
+      <MyDialog dialog={dialog}/>
       <BackBar title={'รายละเอียดงาน'}/>
       <ScrollView
         flex={1}
@@ -267,7 +292,7 @@ export const JobSingleOwn = (props: IProps) => {
                   title={'ยกเลิก'}/>
                 <MyButton
                   flex={5}
-                  isLoading={false}
+                  isLoading={appointment.status.isLoading}
                   onPress={onAppointment}
                   colorScheme={'danger'}
                   fontFamily={'medium'}
