@@ -1,5 +1,5 @@
 import {IProps} from "../../cores/types.core";
-import {CardOpenStore} from "./shares/cards/CardOpenStore";
+import {CardOpenStore} from "../shares/cards/CardOpenStore";
 import {IJobItem} from "../../models/job.model";
 
 export const JobListItem = (props: { item: IJobItem, type: 'new' | 'own' } & IProps) => {

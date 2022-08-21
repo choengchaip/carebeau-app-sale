@@ -1,6 +1,6 @@
 import {IProps} from "../../cores/types.core";
 import {ScrollView} from "native-base";
-import {Filter} from "./shares/Filter";
+import {Filter} from "../shares/Filter";
 import {JobListItem} from "./JobListItem";
 import {IJobItem} from "../../models/job.model";
 import {FadeIn} from "../../components/FadeIn";

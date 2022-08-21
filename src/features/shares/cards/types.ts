@@ -1,4 +1,4 @@
-import {IProps} from "../../../../cores/types.core";
+import {IProps} from "../../../cores/types.core";
 
 export interface ICardProps extends IProps {
   type: 'new' | 'own'

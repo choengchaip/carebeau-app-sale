@@ -1,8 +1,8 @@
-import {IProps} from "../../../cores/types.core";
+import {IProps} from "../../cores/types.core";
 import {Badge, HStack, Pressable, ScrollView, Text} from "native-base";
 import {useState} from "react";
-import {IJobItem} from "../../../models/job.model";
-import {useMount} from "../../../hooks/core.hook";
+import {IJobItem} from "../../models/job.model";
+import {useMount} from "../../hooks/core.hook";
 
 export const Filter = (props: { items: IJobItem[] } & IProps) => {
   const [state, setState] = useState(0)

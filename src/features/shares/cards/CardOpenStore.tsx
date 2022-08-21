@@ -1,10 +1,10 @@
 import {Badge, Box, Button, HStack, Icon, Text, VStack} from "native-base";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {ICardProps} from "./types";
-import {ComponentUtil} from "../../../../utils/component.util";
-import {AppPage} from "../../../../consts/page.const";
-import {useRouter} from "../../../../hooks/router.hook";
-import {MyButton} from "../../../../components/uis/MyButton";
+import {ComponentUtil} from "../../../utils/component.util";
+import {AppPage} from "../../../consts/page.const";
+import {useRouter} from "../../../hooks/router.hook";
+import {MyButton} from "../../../components/uis/MyButton";
 
 export const CardOpenStore = (props: ICardProps) => {
   const router = useRouter()
