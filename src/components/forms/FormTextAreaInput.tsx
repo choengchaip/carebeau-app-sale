@@ -21,6 +21,7 @@ export const FormTextAreaInput = (props: IFormInputProps) => {
           fontFamily={'medium'}
           fontSize={'sm'}
           placeholderTextColor={'muted.400'}
+          value={get(props.form.form, props.name, '')}
           onChangeText={(v) => {
             props.form.setForm({...props.form.form, [props.name]: v})
             props.form.setError({...props.form.error, [props.name]: undefined })

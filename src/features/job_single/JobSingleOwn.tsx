@@ -216,11 +216,11 @@ export const JobSingleOwn = (props: IProps) => {
                   ตำแหน่งที่ตั้ง
                 </Text>
                 <HStack alignItems={'center'}>
-                  <Icon as={MaterialCommunityIcons} name={'map-marker-radius'} color={'info.300'} size={4} mr={2}/>
+                  <Icon as={MaterialCommunityIcons} name={'map-marker-radius'} color={'info.400'} size={4} mr={1}/>
                   <Pressable onPress={async () => {
                     await Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${job.data?.data.job_detail_data.store_loc_lat_long}`)
                   }}>
-                    <Text fontFamily={'semi_bold'} fontSize={'sm'} color={'info.300'} underline={true}>
+                    <Text fontFamily={'semi_bold'} fontSize={'sm'} color={'info.400'} underline={true}>
                       ดูแผนที่
                     </Text>
                   </Pressable>
@@ -321,7 +321,14 @@ export const JobSingleOwn = (props: IProps) => {
                     </Text>
                   </Box>
                 </HStack>
-                <JobSingleOwnCheckIn/>
+                <JobSingleOwnCheckIn
+                  jobType={'own'}
+                  jobNo={job.data!.data.job_detail_data.job_no}
+                  storeCode={job.data!.data.job_detail_data.store_code}
+                  address={job.data!.data.job_detail_data.store_address}
+                  latLong={job.data!.data.job_detail_data.store_loc_lat_long}
+                  nearby={job.data!.data.job_detail_data.store_loc_nearby}
+                />
                 <JobSingleOwnStoreImage/>
                 <JobSingleOwnDocument/>
                 <JobSingleOwnRating/>

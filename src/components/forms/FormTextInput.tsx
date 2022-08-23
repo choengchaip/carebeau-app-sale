@@ -19,9 +19,10 @@ export const FormTextInput = (props: IFormInputProps) => {
           fontFamily={'medium'}
           fontSize={'sm'}
           placeholderTextColor={'muted.400'}
+          value={get(props.form.form, props.name, '')}
           onChangeText={(v) => {
             props.form.setForm({...props.form.form, [props.name]: v})
-            props.form.setError({...props.form.error, [props.name]: undefined })
+            props.form.setError({...props.form.error, [props.name]: undefined})
           }}/>
         {ComponentUtil.renderCondition(() => get(props.form.error, props.name, false), (
           <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>
