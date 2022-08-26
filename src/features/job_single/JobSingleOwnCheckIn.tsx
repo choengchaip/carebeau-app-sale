@@ -28,7 +28,7 @@ export const JobSingleOwnCheckIn = (props: IJobSingleOwnCheckInProps) => {
         store_code: props.storeCode,
         address: props.address,
         note: props.nearby,
-        lat_long: '13.736717,100.523186',
+        lat_long: props.latLong,
       })
     }}/>
 }
