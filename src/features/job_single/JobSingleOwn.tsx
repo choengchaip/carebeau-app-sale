@@ -1,28 +1,28 @@
-import { IProps } from '../../cores/types.core'
-import { useMount } from '../../hooks/core.hook'
-import { useRouter } from '../../hooks/router.hook'
-import { Badge, Box, HStack, Icon, Pressable, ScrollView, Spinner, Text, useToast, VStack } from 'native-base'
-import { BackBar } from '../../components/BackBar'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useMyJobFind } from '../../loaders/my_job_find.loader'
-import { useWatchErrorWithToast, useWatchSuccess } from '../../hooks/watch.hook'
-import { FadeIn } from '../../components/FadeIn'
-import { FormTimeInput } from '../../components/forms/FormTimeInput'
-import { useForm } from '../../hooks/form.hook'
-import { FormDateInput } from '../../components/forms/FormDateInput'
-import { get } from 'lodash'
-import { MyButton } from '../../components/uis/MyButton'
-import { useMyJobAppointment } from '../../loaders/my_job_appointment.loader'
-import { MyDialog } from '../../components/hooks/MyDialog'
-import { useDialog } from '../../hooks/dialog.hook'
-import { AppPage } from '../../consts/page.const'
+import {IProps} from '../../cores/types.core'
+import {useMount} from '../../hooks/core.hook'
+import {useRouter} from '../../hooks/router.hook'
+import {Badge, Box, HStack, Icon, Pressable, ScrollView, Spinner, Text, useToast, VStack} from 'native-base'
+import {BackBar} from '../../components/BackBar'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
+import {useMyJobFind} from '../../loaders/my_job_find.loader'
+import {useWatchErrorWithToast, useWatchSuccess} from '../../hooks/watch.hook'
+import {FadeIn} from '../../components/FadeIn'
+import {FormTimeInput} from '../../components/forms/FormTimeInput'
+import {useForm} from '../../hooks/form.hook'
+import {FormDateInput} from '../../components/forms/FormDateInput'
+import {get} from 'lodash'
+import {MyButton} from '../../components/uis/MyButton'
+import {useMyJobAppointment} from '../../loaders/my_job_appointment.loader'
+import {MyDialog} from '../../components/hooks/MyDialog'
+import {useDialog} from '../../hooks/dialog.hook'
+import {AppPage} from '../../consts/page.const'
 import moment from 'moment'
-import { ComponentUtil } from '../../utils/component.util'
-import { Linking } from 'react-native'
-import { JobSingleOwnCheckIn } from './JobSingleOwnCheckIn'
-import { JobSingleOwnStoreImage } from './JobSingleOwnStoreImage'
-import { JobSingleOwnDocument } from './JobSingleOwnDocument'
-import { JobSingleOwnRating } from './JobSingleOwnRating'
+import {ComponentUtil} from '../../utils/component.util'
+import {Linking, Platform} from 'react-native'
+import {JobSingleOwnCheckIn} from './JobSingleOwnCheckIn'
+import {JobSingleOwnStoreImage} from './JobSingleOwnStoreImage'
+import {JobSingleOwnDocument} from './JobSingleOwnDocument'
+import {JobSingleOwnRating} from './JobSingleOwnRating'
 
 export const JobSingleOwn = (props: IProps) => {
   const form = useForm<{ date: string, time: string }>()
@@ -79,7 +79,9 @@ export const JobSingleOwn = (props: IProps) => {
       title: 'สำเร็จ',
       description: 'ทำการยืนยันการนัดหมายลูกค้าเรียบร้อยแล้ว',
       onFinish: () => {
-        router.push(AppPage.Job.key)
+        job.run({
+          job_no: router.params.job_no
+        })
       }
     })
   })
@@ -99,7 +101,7 @@ export const JobSingleOwn = (props: IProps) => {
       <BackBar title={'รายละเอียดงาน'}/>
       <ScrollView
         flex={1}
-        _contentContainerStyle={{ pb: 10 }}>
+        _contentContainerStyle={{pb: 10}}>
         <FadeIn>
           <VStack space={4} mb={6}>
             {/* 1 */}
@@ -290,7 +292,7 @@ export const JobSingleOwn = (props: IProps) => {
                 <HStack alignItems={'center'}>
                   <Icon as={MaterialCommunityIcons} name={'briefcase-variant'} color={'muted.300'} size={5} mr={2}/>
                   <Text fontFamily={'light'} fontSize={'sm'} color={'black'}>
-                    กรุณาระบุวันที่นัดหมาย*
+                    วันที่นัดหมาย
                   </Text>
                   <Box
                     bg={'muted.100'}
@@ -308,7 +310,7 @@ export const JobSingleOwn = (props: IProps) => {
                   mb={4}>
                   <Icon as={MaterialCommunityIcons} name={'map-legend'} color={'muted.300'} size={5} mr={2}/>
                   <Text fontFamily={'light'} fontSize={'sm'} color={'black'}>
-                    กรุณาระบุเวลานัดหมาย*
+                    เวลาที่นัดหมาย
                   </Text>
                   <Box
                     bg={'muted.100'}
@@ -329,7 +331,8 @@ export const JobSingleOwn = (props: IProps) => {
                   latLong={job.data!.data.job_detail_data.store_loc_lat_long}
                   nearby={job.data!.data.job_detail_data.store_loc_nearby}
                 />
-                <JobSingleOwnStoreImage/>
+                <JobSingleOwnStoreImage
+                  storeCode={job.data!.data.job_detail_data.store_code}/>
                 <JobSingleOwnDocument/>
                 <JobSingleOwnRating/>
               </VStack>

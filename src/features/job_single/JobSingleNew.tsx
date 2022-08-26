@@ -28,6 +28,10 @@ export const JobSingleNew = (props: IJobSingleNewProps) => {
       duration: 3000,
       onFinish: () => {
         router.push(AppPage.Job.key)
+        router.push(AppPage.JobSingle.key, {
+          type: router.params.job_type,
+          job_no: router.params.job_no,
+        })
       }
     })
   })

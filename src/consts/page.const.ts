@@ -2,7 +2,8 @@ import {Middleware} from "../features/middlewares";
 import {Login} from "../features/auth/login";
 import {Job} from "../features/jobs";
 import {JobSingle} from "../features/job_single";
-import { JobSingleCheckIn } from '../features/job_single/pages/JobSingleCheckIn'
+import { JobSingleCheckIn } from '../features/job_single/check_in'
+import {JobSingleStoreImage} from "../features/job_single/store_image";
 
 export const AppPage = {
   Middleware: {
@@ -24,5 +25,9 @@ export const AppPage = {
   JobSingleCheckIn: {
     key: 'JobSingleCheckIn',
     component: JobSingleCheckIn,
+  },
+  JobSingleStoreImage: {
+    key: 'JobSingleStoreImage',
+    component: JobSingleStoreImage,
   },
 }
