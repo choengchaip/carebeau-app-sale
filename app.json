@@ -2,7 +2,7 @@
   "expo": {
     "name": "carebeau-app-admin",
     "slug": "carebeau-app-admin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,7 +25,7 @@
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
-      "buildNumber": "1",
+      "buildNumber": "2",
       "config": {
         "googleMapsApiKey": "AIzaSyD8XxpIyH57aQ4o3lc-c9FIiHXUEXr_ky0"
       }
