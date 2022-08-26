@@ -3,7 +3,7 @@ import {Box, Spinner, useToast} from "native-base";
 import {IProps} from "../../cores/types.core";
 import {useMe} from "../../loaders/auths/me.loader";
 import {useRouter} from "../../hooks/router.hook";
-import {useWatchError, useWatchErrorWithToast, useWatchSuccess} from "../../hooks/watch.hook";
+import {useWatchError, useWatchSuccess} from "../../hooks/watch.hook";
 import {AppPage} from "../../consts/page.const";
 import {useMyJob} from "../../loaders/my_job.loader";
 
@@ -20,7 +20,7 @@ export const Middleware = (props: IProps) => {
   useWatchSuccess(me.statusCacheSecure, async () => {
     await job.run({})
   })
-  useWatchErrorWithToast(toast, me.statusCacheSecure, () => {
+  useWatchError(me.statusCacheSecure, () => {
     router.push(AppPage.Login.key)
   })
 
@@ -38,7 +38,7 @@ export const Middleware = (props: IProps) => {
       router.push(AppPage.Login.key)
     }
   })
-  useWatchErrorWithToast(toast, me.statusCache, () => {
+  useWatchError(me.statusCache, () => {
     router.push(AppPage.Login.key)
   })
 
