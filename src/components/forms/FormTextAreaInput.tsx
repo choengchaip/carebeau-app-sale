@@ -1,4 +1,4 @@
-import { FormControl, Input, Text, TextArea, VStack, WarningOutlineIcon } from 'native-base'
+import {FormControl, Text, TextArea, VStack, WarningOutlineIcon} from 'native-base'
 import {ComponentUtil} from "../../utils/component.util";
 import {IFormInputProps} from "./types";
 import {get} from "lodash";
@@ -8,7 +8,8 @@ export const FormTextAreaInput = (props: IFormInputProps) => {
     <FormControl
       mb={props.mb || 2}
       isRequired
-      isInvalid={props.name in props.form.error}>
+      isInvalid={props.name in props.form.error}
+      {...props}>
       <VStack>
         <TextArea
           alignItems={'flex-start'}
@@ -24,7 +25,7 @@ export const FormTextAreaInput = (props: IFormInputProps) => {
           value={get(props.form.form, props.name, '')}
           onChangeText={(v) => {
             props.form.setForm({...props.form.form, [props.name]: v})
-            props.form.setError({...props.form.error, [props.name]: undefined })
+            props.form.setError({...props.form.error, [props.name]: undefined})
           }}/>
         {ComponentUtil.renderCondition(() => get(props.form.error, props.name, false), (
           <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>

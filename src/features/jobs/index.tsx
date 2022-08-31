@@ -1,5 +1,5 @@
 import {IProps} from "../../cores/types.core";
-import {Badge, Box, HStack, Pressable, Text, useToast, VStack} from "native-base";
+import {Badge, Box, Center, HStack, Pressable, Text, useToast, VStack} from "native-base";
 import {useState} from "react";
 import {JobList} from "./JobList";
 import {useMount} from "../../hooks/core.hook";

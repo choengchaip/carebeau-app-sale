@@ -15,10 +15,9 @@ import {MyButton} from '../../components/uis/MyButton'
 import {useMyJobAppointment} from '../../loaders/my_job_appointment.loader'
 import {MyDialog} from '../../components/hooks/MyDialog'
 import {useDialog} from '../../hooks/dialog.hook'
-import {AppPage} from '../../consts/page.const'
 import moment from 'moment'
 import {ComponentUtil} from '../../utils/component.util'
-import {Linking, Platform} from 'react-native'
+import {Linking} from 'react-native'
 import {JobSingleOwnCheckIn} from './JobSingleOwnCheckIn'
 import {JobSingleOwnStoreImage} from './JobSingleOwnStoreImage'
 import {JobSingleOwnDocument} from './JobSingleOwnDocument'
@@ -332,8 +331,11 @@ export const JobSingleOwn = (props: IProps) => {
                   nearby={job.data!.data.job_detail_data.store_loc_nearby}
                 />
                 <JobSingleOwnStoreImage
-                  storeCode={job.data!.data.job_detail_data.store_code}/>
-                <JobSingleOwnDocument/>
+                  storeCode={job.data!.data.job_detail_data.store_code}
+                  jobNo={job.data!.data.job_detail_data.job_no}/>
+                <JobSingleOwnDocument
+                  storeCode={job.data!.data.job_detail_data.store_code}
+                  jobNo={job.data!.data.job_detail_data.job_no}/>
                 <JobSingleOwnRating/>
               </VStack>
             ))}
